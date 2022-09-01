@@ -2,7 +2,8 @@
 ```
     conda create -n slu python=3.9
     conda activate slu
-    conda install pytorch torchvision torchaudio -c pytorch
+    conda install pytorch torchvision torchaudio -c pytorch (mac)
+    conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch (linux)
 ```
 ### 运行
     
@@ -41,3 +42,12 @@
   + 强力的NLP工具库: https://stanfordnlp.github.io/stanza/
 + jieba
   + 中文分词工具: https://github.com/fxsjy/jieba
+
+### Performance
+
+|    model     | Dev acc | Dev precision | Dev recall | Dev F1 score |
+| ------------ | ------- | ------------- | ---------- | ------------ |
+|     RNN      |  71.66  |     75.03     |    73.90   |     74.46    |
+|     LSTM     |  73.83  |     79.63     |    77.33   |     78.46    |
+|     GRU      |  72.20  |     80.39     |    75.38   |     78.04    |
+|  Transformer |  **88.27**  |     **99.88**     |    **88.45**   |     **93.82**    |

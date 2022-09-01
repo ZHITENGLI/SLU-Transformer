@@ -70,7 +70,7 @@ class SLUTagging(nn.Module):
         tgt_embed = self.tag_embed(tag_ids)
         tgt_embed = self.positional_encoding(X=tgt_embed, num_features=self.config.embed_size)
 
-        mask = self.transformer.generate_square_subsequent_mask(max(lengths))
+        mask = self.transformer.generate_square_subsequent_mask(max(lengths)).to("cuda" if torch.cuda.is_available() else "cpu")
         # packed_inputs = rnn_utils.pack_padded_sequence(src_embed, lengths, batch_first=True)
         # packed_rnn_out, h_t_c_t = self.rnn(packed_inputs)  # bsize x seqlen x dim
         # rnn_out, unpacked_len = rnn_utils.pad_packed_sequence(packed_rnn_out, batch_first=True)
@@ -94,8 +94,6 @@ class SLUTagging(nn.Module):
             for idx, tid in enumerate(pred):
                 tag = label_vocab.convert_idx_to_tag(tid)
                 pred_tags.append(tag)
-                if (tag != 'O'):
-                    print("1111111111")
                 if (tag == 'O' or tag.startswith('B')) and len(tag_buff) > 0:
                     slot = '-'.join(tag_buff[0].split('-')[1:])
                     value = ''.join([batch.utt[i][j] for j in idx_buff])

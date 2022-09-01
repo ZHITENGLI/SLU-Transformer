@@ -70,6 +70,11 @@ if __name__ == '__main__':
         num_training_steps = ((len(train_dataset) + args.batch_size - 1) // args.batch_size) * args.max_epoch
         print('Total training steps: %d' % (num_training_steps))
         optimizer = set_optimizer(model, args)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min',
+                                                     factor=0.5,
+                                                     patience=5,
+                                                     verbose=True)
+
         nsamples, best_result = len(train_dataset), {'dev_acc': 0., 'dev_f1': 0.}
         train_index, step_size = np.arange(nsamples), args.batch_size
         print('Start training ......')
@@ -96,6 +101,9 @@ if __name__ == '__main__':
             metrics, dev_loss = decode('dev')
             dev_acc, dev_fscore = metrics['acc'], metrics['fscore']
             print('Evaluation: \tEpoch: %d\tTime: %.4f\tDev acc: %.2f\tDev fscore(p/r/f): (%.2f/%.2f/%.2f)' % (i, time.time() - start_time, dev_acc, dev_fscore['precision'], dev_fscore['recall'], dev_fscore['fscore']))
+            
+            scheduler.step(dev_loss)
+
             if dev_acc > best_result['dev_acc']:
                 best_result['dev_loss'], best_result['dev_acc'], best_result['dev_f1'], best_result['iter'] = dev_loss, dev_acc, dev_fscore, i
                 torch.save({
