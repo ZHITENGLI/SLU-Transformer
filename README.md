@@ -7,11 +7,15 @@
     conda install pytorch torchvision torchaudio -c pytorch (mac)
     conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch (linux)
 ```
-### 运行
-    
-在根目录下运行
+### 在根目录下运行
 
+RNN/LSTM/GRU:  
+  
     python scripts/slu_baseline.py
+
+Transformer:  
+  
+    python scripts/slu_transformer.py
 
 ### 代码说明
 
