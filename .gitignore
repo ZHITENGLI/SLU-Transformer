@@ -1,4 +1,3 @@
 *.pyc
 .DS_Store
-word2vec-768.txt
 model.bin
